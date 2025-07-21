@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("oecu-GoogleDriveShareChecker")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+92fbad0482a54118b0baf97b34b362d19b22939a")]
 [assembly: System.Reflection.AssemblyProductAttribute("oecu-GoogleDriveShareChecker")]
 [assembly: System.Reflection.AssemblyTitleAttribute("oecu-GoogleDriveShareChecker")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
