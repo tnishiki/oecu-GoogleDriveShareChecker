@@ -1,0 +1,13 @@
+﻿
+bin
+bin/*
+
+obj
+obj/*
+
+*.cache
+
+.vs
+.vs/*
+
+*.vsidx
