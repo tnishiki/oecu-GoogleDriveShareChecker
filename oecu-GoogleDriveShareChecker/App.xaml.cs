@@ -27,6 +27,7 @@ namespace oecu_GoogleDriveShareChecker
                     services.AddSingleton<MainWindow>();
 
                     // Services（必要に応じて）
+                    services.AddSingleton<IWindowProvider, WindowProvider>();
                     services.AddSingleton<ICoreService, CoreService>();
                 })
                 .Build();

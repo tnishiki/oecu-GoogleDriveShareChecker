@@ -7,7 +7,11 @@ using System.Windows;
 
 namespace oecu_GoogleDriveShareChecker.Services
 {
-    public interface ICoreService
+    public class WindowProvider:IWindowProvider
     {
+        public Window? GetMainWindow()
+        {
+            return Application.Current?.MainWindow;
+        }
     }
 }

@@ -10,6 +10,9 @@ using System.Windows.Media.Animation;
 using oecu_GoogleDriveShareChecker.Datas;
 using System.Xml.Linq;
 using System.Collections.ObjectModel;
+using oecu_GoogleDriveShareChecker.Windows;
+using System.Windows;
+using System.Windows.Automation.Provider;
 
 namespace oecu_GoogleDriveShareChecker.Services;
 
@@ -17,6 +20,15 @@ public class CoreService : ICoreService
 {
     private const string RegistryBasePath = @"Software\oecu\GoogleDriveShareChecker\ServiceAccounts";
     private const string JsonValueName = "json";
+
+    private readonly IWindowProvider _windowProvider;
+
+    
+    public CoreService(IWindowProvider windowProvider)
+    {
+        _windowProvider = windowProvider;
+    }
+
 
     //サービスアカウント
     public static void SaveCredentialToRegistry(string serviceAccountEmail, string jsonFilePath)
@@ -75,5 +87,22 @@ public class CoreService : ICoreService
     {
         using var rootKey = Registry.CurrentUser.OpenSubKey(RegistryBasePath, writable: true);
         rootKey?.DeleteSubKey(serviceAccountEmail, throwOnMissingSubKey: false);
+    }
+
+    public static void OpenServiceAccount(string ServiceAccountEmail, string Json)
+    {
+        var dialog = new ServiceAccountEditor();
+
+        dialog.model.ServiceAccountEmail = ServiceAccountEmail;
+        dialog.model.Json = Json;
+
+        dialog.Owner = Application.Current.MainWindow; // モーダルにするために Owner を指定
+        bool? result = dialog.ShowDialog();
+
+        if (result == true)
+        {
+            // 保存された場合の処理
+        }
+
     }
 }
