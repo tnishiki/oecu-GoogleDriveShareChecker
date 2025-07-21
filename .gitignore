@@ -11,3 +11,5 @@ obj/*
 .vs/*
 
 *.vsidx
+/oecu-GoogleDriveShareChecker/obj/Debug/net8.0-windows/oecu-GoogleDriveShareChecker.AssemblyInfo.cs
+/oecu-GoogleDriveShareChecker/obj/Debug/net8.0-windows/oecu-GoogleDriveShareChecker.AssemblyInfoInputs.cache
