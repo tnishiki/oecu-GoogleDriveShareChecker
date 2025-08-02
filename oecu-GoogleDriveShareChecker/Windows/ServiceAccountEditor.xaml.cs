@@ -1,6 +1,7 @@
 ﻿using oecu_GoogleDriveShareChecker.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace oecu_GoogleDriveShareChecker.Windows
     /// </summary>
     public partial class ServiceAccountEditor : Window
     {
-        public ServiceAccountEditorViewModel model = new ServiceAccountEditorViewModel(); 
+        public ServiceAccountEditorViewModel model = new ServiceAccountEditorViewModel();
         public ServiceAccountEditor()
         {
             InitializeComponent();
@@ -28,5 +29,40 @@ namespace oecu_GoogleDriveShareChecker.Windows
             model.EditorWindow = this;
             DataContext = model;
         }
-    }
+
+        private void TbJsonText_PreviewDragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+            e.Handled = true;
+        }
+
+        private void TbJsonText_Drop(object sender, DragEventArgs e)
+        {
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files.Length > 0 && File.Exists(files[0]))
+            {
+                try
+                {
+                    if (sender is TextBox)
+                    {
+                        TextBox tbx = (TextBox)sender;
+
+                        string content = File.ReadAllText(files[0]);
+                        tbx.Text = content;
+                    }
+                }
+                catch (IOException ex)
+                {
+                    MessageBox.Show("ファイル読み込みエラー: " + ex.Message);
+                }
+            }
+        }
+    }    
 }
