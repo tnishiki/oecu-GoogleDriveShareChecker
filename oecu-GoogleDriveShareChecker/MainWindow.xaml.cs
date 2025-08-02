@@ -1,4 +1,5 @@
-﻿using oecu_GoogleDriveShareChecker.Services;
+﻿using oecu_GoogleDriveShareChecker.Datas;
+using oecu_GoogleDriveShareChecker.Services;
 using oecu_GoogleDriveShareChecker.ViewModels;
 using System.Text;
 using System.Windows;
@@ -26,6 +27,21 @@ namespace oecu_GoogleDriveShareChecker
 
             DataContext = model;
 
+        }
+        //ドメインを変更する
+        private void DomainListbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DataContext != null && DataContext is MainWindowViewModel)
+            {
+                var dc = (MainWindowViewModel)DataContext;
+
+                if (e != null && 0 < e.AddedItems.Count && e.AddedItems[0] is ServiceAccountData)
+                {
+                    ServiceAccountData? sv = (ServiceAccountData?)e.AddedItems[0];
+
+                    dc.ReloadOrgTree(sv!);
+                }
+            }
         }
     }
 }

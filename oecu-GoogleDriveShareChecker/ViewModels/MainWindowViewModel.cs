@@ -61,10 +61,17 @@ public partial class MainWindowViewModel : ObservableObject
     [RelayCommand]
     public void ModifyServiceAccount()
     {
-        if(SelectedAccount == null)
+        if (SelectedAccount == null)
         {
             return;
         }
-        CoreService.OpenServiceAccount(SelectedAccount.ServiceAccountEmail,SelectedAccount.Json);
+        CoreService.OpenServiceAccount(SelectedAccount.ServiceAccountEmail, SelectedAccount.Json);
+
+        ServiceAccountList = CoreService.ListRegisteredServiceAccounts();
+    }
+
+    public void ReloadOrgTree(ServiceAccountData sacount)
+    {
+        //sacount;
     }
 }
