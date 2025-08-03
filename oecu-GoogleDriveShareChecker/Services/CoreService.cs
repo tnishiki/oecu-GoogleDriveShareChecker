@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Windows.Media.Animation;
-using oecu_GoogleDriveShareChecker.Datas;
-using System.Xml.Linq;
 using System.Collections.ObjectModel;
-using oecu_GoogleDriveShareChecker.Windows;
+using System.ComponentModel.Design;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Automation.Provider;
-using System.Text.Json;
+using System.Xml.Linq;
 using Microsoft.Data.Sqlite;
-using Google.Apis.Admin.Directory.directory_v1;
+using Microsoft.Win32;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
-using System.ComponentModel.Design;
+using Google.Apis.Admin.Directory.directory_v1;
+using Google.Apis.Admin.Directory.directory_v1.Data;
+using oecu_GoogleDriveShareChecker.Datas;
+using oecu_GoogleDriveShareChecker.Windows;
+using static System.Net.WebRequestMethods;
 
 namespace oecu_GoogleDriveShareChecker.Services;
 
@@ -26,7 +28,6 @@ public class CoreService : ICoreService
 {
     private const string RegistryBasePath = @"Software\oecu\GoogleDriveShareChecker\ServiceAccounts";
     private const string JsonValueName = "json";
-    private string[] scopes = { DirectoryService.Scope.AdminDirectoryOrgunitReadonly };
 
 
     private readonly IWindowProvider _windowProvider;
@@ -60,7 +61,7 @@ public class CoreService : ICoreService
 
             connectionString = $"Data Source={dbPath}";
 
-            if (File.Exists(dbPath))
+            if (System.IO.File.Exists(dbPath))
             {
                 result = true;
                 return result;
@@ -99,6 +100,7 @@ public class CoreService : ICoreService
 
     public async Task<DirectoryService> GetGoogleDirectoryService(string json)
     {
+        string[] scopes = { DirectoryService.Scope.AdminDirectoryOrgunitReadonly };
         var credential = GoogleCredential.FromJson(json).CreateScoped(scopes);
 
 
@@ -300,5 +302,64 @@ public class CoreService : ICoreService
         return !string.IsNullOrWhiteSpace(key)
             && key.Contains("-----BEGIN PRIVATE KEY-----")
             && key.Contains("-----END PRIVATE KEY-----");
+    }
+
+
+    public static List<OrgUnit>? GetOrgList(ServiceAccountData serviceAccountData)
+    {
+        var service = CreateDirectoryService(serviceAccountData);
+
+        // 組織ツリー（すべての OrgUnit を階層構造で）を取得
+        return ListOrgUnitTree(service);
+    }
+    //
+    //ディレクトリサービスを取得する
+    //
+    private static DirectoryService CreateDirectoryService(ServiceAccountData serviceAccountData)
+    {
+        // 2) Admin SDK の読み取り専用スコープ
+        string[] scopes = { DirectoryService.Scope.AdminDirectoryOrgunitReadonly };
+
+        // 3) ドメイン管理者ユーザー（ドメインワイド・デリゲーションで許可済み）のメールアドレス
+        const string adminUser = "mc2adm@osakac.ac.jp";
+
+        GoogleCredential credential = GoogleCredential
+            .FromJson(serviceAccountData.Json)
+            .CreateScoped(scopes)            // スコープをセット
+            .CreateWithUser(adminUser);      // 管理者ユーザーを委任
+
+        // 4) Directory API クライアントを初期化
+        return new DirectoryService(new BaseClientService.Initializer
+        {
+            HttpClientInitializer = credential,
+            ApplicationName = "oecu-GoogleDriveShareChecker",
+
+        });
+    }
+    /// <summary>
+    /// 組織ユニットをツリー形式で列挙してコンソールに出力
+    /// </summary>
+    private static List<OrgUnit>? ListOrgUnitTree(DirectoryService service)
+    {
+        try
+        {
+            var request = service.Orgunits.List("my_customer");
+            request.Type = OrgunitsResource.ListRequest.TypeEnum.All;
+
+            OrgUnits response = request.Execute();
+
+            if (response == null)
+            {
+                return null;
+            }
+            else
+            {
+                return (List<OrgUnit>)response!.OrganizationUnits;
+            }
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
     }
 }
