@@ -16,6 +16,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300"/>
                 <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="30*"/>
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="40*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
@@ -71,6 +73,92 @@
                     <Button Grid.Row="1" Content="更新" Width="120" HorizontalAlignment="Right"/>
                     <ListBox ItemsSource="{Binding ShareDriveList}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedShareDrive, Mode=TwoWay}" Foreground="White" Background="#1E1E1E" Margin="0,39,0,1" Grid.RowSpan="2"/>
                 </Grid>
+            </Grid>
+            <GridSplitter Grid.Column="1" Width="5" Background="#5A5A5A" VerticalAlignment="Stretch" HorizontalAlignment="Center" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" ShowsPreview="True" Cursor="SizeNS"/>
+            <Grid Grid.Column="2">
+                <DataGrid ItemsSource="{Binding AccountList}" IsReadOnly="True" AutoGenerateColumns="False" Background="#FF1E1E1E" HeadersVisibility="Column" SelectedCellsChanged="Account_SelectedCellChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="アカウント" Binding="{Binding Account}" Width="120">
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Background" Value="#FF1F1F1F"/>
+                                    <Setter Property="BorderBrush" Value="#FF1F1F1F"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#203D4B"/>
+                                            <Setter Property="BorderBrush" Value="#26A0DA"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="名前" Binding="{Binding UserName}" Width="220*">
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Background" Value="#FF1F1F1F"/>
+                                    <Setter Property="BorderBrush" Value="#FF1F1F1F"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#203D4B"/>
+                                            <Setter Property="BorderBrush" Value="#26A0DA"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+            <GridSplitter Grid.Column="3" Width="5" Background="#5A5A5A" VerticalAlignment="Stretch" HorizontalAlignment="Center" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" ShowsPreview="True" Cursor="SizeNS"/>
+            <Grid Grid.Column="4" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Background="WhiteSmoke">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="更新" Width="120" Height="30"/>
+                </Grid>
+                <DataGrid Grid.Row="1" ItemsSource="{Binding ItemList}" IsReadOnly="True" AutoGenerateColumns="False" Background="#FF1E1E1E" HeadersVisibility="Column">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="アイテム名" Binding="{Binding ItemName}" Width="120">
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Background" Value="#FF1F1F1F"/>
+                                    <Setter Property="BorderBrush" Value="#FF1F1F1F"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#203D4B"/>
+                                            <Setter Property="BorderBrush" Value="#26A0DA"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="URL" Binding="{Binding ItemUrl}" Width="220*">
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="Background" Value="#FF1F1F1F"/>
+                                    <Setter Property="BorderBrush" Value="#FF1F1F1F"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="#203D4B"/>
+                                            <Setter Property="BorderBrush" Value="#26A0DA"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </Grid>
         </Grid>
     </Grid>

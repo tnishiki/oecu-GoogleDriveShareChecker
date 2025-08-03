@@ -20,6 +20,8 @@ public partial class MainWindowViewModel : ObservableObject
     private ObservableCollection<ServiceAccountData>? _ServiceAccountList = null;
     [ObservableProperty]
     private ServiceAccountData? _SelectedAccount = null;
+    [ObservableProperty]
+    private ObservableCollection<AccountData> _AccountList;
 
     [ObservableProperty]
     private ObservableCollection<TreeViewModel> _OrganizationTree = new ObservableCollection<TreeViewModel>
@@ -48,6 +50,11 @@ public partial class MainWindowViewModel : ObservableObject
         {
             Name = "sharedrive"
         });
+
+        AccountList = new ObservableCollection<AccountData>();
+
+        AccountList.Add(new AccountData() { Account = "nishiki@osakac.ac.jp", UserName = "NISHIKI Takeshi", });
+        AccountList.Add(new AccountData() { Account = "asa-k@osakac.ac.jp", UserName = "ASAJIMA Kota", });
     }
     public void LoadServiceAccountList()
     {
@@ -69,9 +76,18 @@ public partial class MainWindowViewModel : ObservableObject
 
         ServiceAccountList = CoreService.ListRegisteredServiceAccounts();
     }
-
-    public void ReloadOrgTree(ServiceAccountData sacount)
+    [RelayCommand]
+    public void ReloadOrgTree()
     {
-        //sacount;
+        if (SelectedAccount == null)
+        {
+            return;
+        }
+
+        //組織ツリーを取得
+
+        var a = CoreService.GetOrgList(SelectedAccount);
+
+
     }
 }

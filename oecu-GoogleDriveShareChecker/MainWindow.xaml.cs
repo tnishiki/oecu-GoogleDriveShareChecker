@@ -39,7 +39,21 @@ namespace oecu_GoogleDriveShareChecker
                 {
                     ServiceAccountData? sv = (ServiceAccountData?)e.AddedItems[0];
 
-                    dc.ReloadOrgTree(sv!);
+                    //dc.ReloadOrgTree(sv!);
+                }
+            }
+        }
+
+        private void Account_SelectedCellChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            if (DataContext != null && DataContext is MainWindowViewModel)
+            {
+                var dc = (MainWindowViewModel)DataContext;
+
+                if (e != null && 0 < e.AddedCells.Count)
+                {
+                    List<AccountData> list = (List<AccountData>)e.AddedCells;
+
                 }
             }
         }
